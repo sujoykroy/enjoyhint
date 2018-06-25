@@ -34,7 +34,8 @@
   pointer-events: all;
 }
 
-.enjoyhint_next_btn{
+.enjoyhint_next_btn,
+.enjoyhint_previous_btn{
   position:absolute;
   z-index: 1012;
   /*display: none;*/

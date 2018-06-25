@@ -49,6 +49,11 @@ var EnjoyHint = function (_options) {
                 nextStep();
             },
 
+            onPreviousClick: function () {
+
+                previousStep();
+            },
+
             onSkipClick: function () {
 
                 options.onSkip();
@@ -72,15 +77,18 @@ var EnjoyHint = function (_options) {
     that.clear = function(){
 
         var $nextBtn = $('.enjoyhint_next_btn');
+        var $previousBtn = $('.enjoyhint_previous_btn');
         var $skipBtn = $('.enjoyhint_skip_btn');
 
         $nextBtn.removeClass(that.nextUserClass);
         $nextBtn.text("Next");
+        $previousBtn.removeClass(that.previousUserClass);
+        $previousBtn.text("Previous");
         $skipBtn.removeClass(that.skipUserClass);
         $skipBtn.text("Skip");
     };
 
-    var stepAction = function () {
+    var stepAction = function (actionName) {
 
         if (!(data && data[current_step])) {
 
@@ -90,7 +98,11 @@ var EnjoyHint = function (_options) {
             return;
         }
 
-        options.onNext();
+        actionName = actionName || 'onNext';
+        var actionFunction = options[actionName];
+        if (actionFunction && actionFunction() == false) {
+            return;
+        }
 
         var $enjoyhint = $('.enjoyhint');
 
@@ -165,6 +177,10 @@ var EnjoyHint = function (_options) {
 
                     $body.enjoyhint('show_next');
                 }
+                if (step_data.showPrevious == true) {
+
+                    $body.enjoyhint('show_previous');
+                }
 
                 if (step_data.showSkip == false) {
 
@@ -185,6 +201,15 @@ var EnjoyHint = function (_options) {
                     $nextBtn.addClass(step_data.nextButton.className || "");
                     $nextBtn.text(step_data.nextButton.text || "Next");
                     that.nextUserClass = step_data.nextButton.className;
+                }
+
+                if (step_data.previousButton) {
+
+                    var $nextBtn = $('.enjoyhint_previous_btn');
+
+                    $nextBtn.addClass(step_data.previousButton.className || "");
+                    $nextBtn.text(step_data.previousButton.text || "Previous");
+                    that.previousUserClass = step_data.previousButton.className;
                 }
 
                 if (step_data.skipButton) {
@@ -230,6 +255,11 @@ var EnjoyHint = function (_options) {
                         case 'next':
 
                             $body.enjoyhint('show_next');
+                            break;
+
+                        case 'previous':
+
+                            $body.enjoyhint('show_previous');
                             break;
                     }
 
@@ -290,10 +320,19 @@ var EnjoyHint = function (_options) {
         }, timeout);
     };
 
+    that.stepAction = stepAction;
+
     var nextStep = function() {
 
         current_step++;
         stepAction();
+    };
+
+    var previousStep = function() {
+
+        current_step--;
+        if (current_step < 0) current_step = 0;
+        stepAction('onPrevious');
     };
 
     var skipAll = function() {
@@ -373,6 +412,11 @@ var EnjoyHint = function (_options) {
             case 'next':
 
                 nextStep();
+                break;
+
+            case 'previous':
+
+                previousStep();
                 break;
 
             case 'skip':

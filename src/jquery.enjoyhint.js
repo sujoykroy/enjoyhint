@@ -38,6 +38,9 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
 
                     },
 
+                    onPreviousClick: function() {
+                    },
+
                     animation_time: 800
                 };
 
@@ -80,6 +83,7 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
                     skip_btn: 'enjoyhint_skip_btn',
                     close_btn: 'enjoyhint_close_btn',
                     next_btn: 'enjoyhint_next_btn',
+                    prev_btn: 'enjoyhint_previous_btn',
                     main_canvas: 'enjoyhint_canvas',
                     main_svg: 'enjoyhint_svg',
                     svg_wrapper: 'enjoyhint_svg_wrapper',
@@ -161,8 +165,11 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
                     that.options.onSkipClick();
                 });
                 that.$next_btn = $('<div>', {'class': that.cl.next_btn}).appendTo(that.enjoyhint).html('Next').click(function (e) {
-
                     that.options.onNextClick();
+                });
+                that.$previous_btn = $('<div>', {'class': that.cl.prev_btn}).appendTo(that.enjoyhint).html('Previous').click(function (e) {
+
+                    that.options.onPreviousClick();
                 });
 
                 that.$close_btn = $('<div>', {'class': that.cl.close_btn}).appendTo(that.enjoyhint).html('').click(function (e) {
@@ -337,7 +344,6 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
                                 y1 = labelRect.top;
                                 bezX = x1;
                                 bezY = y1;
-                                console.log("ok");
                             }
 
                             if (window.innerWidth < 900) {
@@ -413,6 +419,12 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
 
                     that.$next_btn.removeClass(that.cl.hide);
                     that.nextBtn = "show";
+                };
+
+                that.showPreviousBtn = function () {
+
+                    that.$previous_btn.removeClass(that.cl.hide);
+                    that.previousBtn = "show";
                 };
 
                 that.hideSkipBtn = function () {
@@ -859,12 +871,18 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
                         text: data.text
                     });
 
-                    that.$next_btn.css({
+                    that.$previous_btn.css({
                         left: label_x,
                         top: label_y + label_height + 20
                     });
+                    that.$next_btn.css({
+                        left: label_data.right - that.$next_btn.width() - 10,
+                        top: label_y + label_height + 20
+                    });
 
-                    var left_skip = label_x + that.$next_btn.width() + 10;
+                    var left_skip = label_x +
+                        that.$previous_btn.width() + 10 +
+                        that.$next_btn.width() + 10;
 
                     if (that.nextBtn == "hide"){
 
@@ -1048,6 +1066,16 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
             this.each(function () {
 
                 this.enjoyhint_obj.showNextBtn();
+            });
+
+            return this;
+        },
+
+        show_previous: function () {
+
+            this.each(function () {
+
+                this.enjoyhint_obj.showPreviousBtn();
             });
 
             return this;
