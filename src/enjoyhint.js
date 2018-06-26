@@ -58,7 +58,8 @@ var EnjoyHint = function (_options) {
 
                 options.onSkip();
                 skipAll();
-            }
+            },
+            arrowColor: options.arrowColor || 'rgb(255, 255, 255)'
         });
     };
 

@@ -58,7 +58,8 @@ var EnjoyHint = function (_options) {
 
                 options.onSkip();
                 skipAll();
-            }
+            },
+            arrowColor: options.arrowColor || 'rgb(255, 255, 255)'
         });
     };
 
@@ -500,7 +501,8 @@ var EnjoyHint = function (_options) {
                     onPreviousClick: function() {
                     },
 
-                    animation_time: 800
+                    animation_time: 800,
+                    arrowColor: 'rgb(255,255,255)'
                 };
 
                 this.enjoyhint_obj = {};
@@ -583,7 +585,7 @@ var EnjoyHint = function (_options) {
 
                 var defs = $(makeSVG('defs'));
                 var marker = $(makeSVG('marker', {id: "arrowMarker", viewBox: "0 0 36 21", refX: "21", refY: "10", markerUnits: "strokeWidth", orient: "auto", markerWidth: "16", markerHeight: "12"}));
-                var polilyne = $(makeSVG('path', {style: "fill:none; stroke:rgb(255,255,255); stroke-width:2", d: "M0,0 c30,11 30,9 0,20"}));
+                var polilyne = $(makeSVG('path', {style: "fill:none; stroke:"+that.options.arrowColor+"; stroke-width:2", d: "M0,0 c30,11 30,9 0,20"}));
 
                 defs.append(marker.append(polilyne)).appendTo(that.$svg);
 
@@ -1117,7 +1119,7 @@ var EnjoyHint = function (_options) {
                         $('#enjoyhint_arrpw_line').remove();
 
                         var d = 'M' + x_from + ',' + y_from + ' Q' + control_point_x + ',' + control_point_y + ' ' + x_to + ',' + y_to;
-                        that.$svg.append(makeSVG('path', {style: "fill:none; stroke:rgb(255,255,255); stroke-width:3", 'marker-end': "url(#arrowMarker)", d: d, id: 'enjoyhint_arrpw_line'}));
+                        that.$svg.append(makeSVG('path', {style: "fill:none; stroke:"+that.options.arrowColor+"; stroke-width:3", 'marker-end': "url(#arrowMarker)", d: d, id: 'enjoyhint_arrpw_line'}));
                         that.enjoyhint.removeClass(that.cl.svg_transparent);
 
                     }, that.options.animation_time / 2);
@@ -1172,7 +1174,6 @@ var EnjoyHint = function (_options) {
                 })(jQuery);
 
                 that.renderLabelWithShape = function (data) {
-
                     that.stepData = data;
 
                     function findParentDialog(element) {
@@ -1330,13 +1331,21 @@ var EnjoyHint = function (_options) {
                         text: data.text
                     });
 
+
+                    var buttonTop = label_y + label_height + 20;
+                    var buttonBottom = buttonTop + that.$previous_btn.height()*1.2;
+
+                    if ($(window).height() < buttonBottom) {
+                        buttonTop = label_y - that.$previous_btn.height() - 40;
+                    }
+
                     that.$previous_btn.css({
                         left: label_x,
-                        top: label_y + label_height + 20
+                        top: buttonTop
                     });
                     that.$next_btn.css({
                         left: label_data.right - that.$next_btn.width() - 10,
-                        top: label_y + label_height + 20
+                        top: buttonTop
                     });
 
                     var left_skip = label_x +
@@ -1350,7 +1359,7 @@ var EnjoyHint = function (_options) {
 
                     that.$skip_btn.css({
                         left: left_skip,
-                        top: label_y + label_height + 20
+                        top: buttonTop
                     });
 
                     that.$close_btn.css({
