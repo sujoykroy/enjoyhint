@@ -59,7 +59,8 @@ var EnjoyHint = function (_options) {
                 options.onSkip();
                 skipAll();
             },
-            arrowColor: options.arrowColor || 'rgb(255, 255, 255)'
+            arrowColor: options.arrowColor || 'rgb(255, 255, 255)',
+            backgroundColor: options.backgroundColor
         });
     };
 
@@ -283,6 +284,9 @@ var EnjoyHint = function (_options) {
                 var max_habarites = Math.max($element.outerWidth(), $element.outerHeight());
                 var radius = step_data.radius || Math.round(max_habarites / 2) + 5;
                 var offset = $element.offset();
+                if (!offset) {//If the element is abaset, do some defaults
+                    offset = { left: 0, top: 0 };
+                }
                 var w = $element.outerWidth();
                 var h = $element.outerHeight();
                 var shape_margin = (step_data.margin !== undefined) ? step_data.margin : 10;
@@ -598,7 +602,7 @@ var EnjoyHint = function (_options) {
 
                 that.layer = new Kinetic.Layer();
                 that.rect = new Kinetic.Rect({
-                    fill: 'rgba(0,0,0,0.6)',
+                    fill: that.options.backgroundColor || 'rgba(0,0,0,0.6)',
                     width: that.canvas_size.w,
                     height: that.canvas_size.h
                 });
@@ -1177,7 +1181,7 @@ var EnjoyHint = function (_options) {
                     that.stepData = data;
 
                     function findParentDialog(element) {
-
+                        element = element || {};
                         if (element.tagName === "MD-DIALOG") {
 
                             return element;

@@ -138,7 +138,7 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
 
                 that.layer = new Kinetic.Layer();
                 that.rect = new Kinetic.Rect({
-                    fill: 'rgba(0,0,0,0.6)',
+                    fill: that.options.backgroundColor || 'rgba(0,0,0,0.6)',
                     width: that.canvas_size.w,
                     height: that.canvas_size.h
                 });
@@ -717,7 +717,7 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
                     that.stepData = data;
 
                     function findParentDialog(element) {
-
+                        element = element || {};
                         if (element.tagName === "MD-DIALOG") {
 
                             return element;
